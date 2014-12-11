@@ -80,17 +80,17 @@ var markdown = require('helper-markdown');
 
 // as a mixin
 _.mixin({markdown: markdown});
-_.template('<%= _.markdown("fixtures/*.txt") %>', {});
-//=> 'AAA\nBBB\nCCC'
+_.template('<%= _.markdown("# heading") %>', {});
+//=> '<h1>heading</h1>\n'
 
 // passed on the context
-_.template('<%= markdown("fixtures/*.txt") %>', {markdown: markdown});
-//=> 'AAA\nBBB\nCCC'
+_.template('<%= markdown("# heading") %>', {markdown: markdown});
+//=> '<h1>heading</h1>\n'
 
 // as an import
 var settings = {imports: {markdown: markdown}};
-_.template('<%= markdown("fixtures/*.txt") %>', {}, settings);
-//=> 'AAA\nBBB\nCCC'
+_.template('<%= markdown("# heading") %>', {}, settings);
+//=> '<h1>heading</h1>\n'
 ```
 
 

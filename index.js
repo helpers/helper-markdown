@@ -7,9 +7,10 @@
 
 'use strict';
 
-var hljs = require('highlight.js');
-var Remarkable = require('remarkable');
-var extend = require('extend-shallow');
+var lazy = require('lazy-cache')(require);
+lazy('highlight.js', 'hljs');
+lazy('remarkable', 'Remarkable');
+lazy('extend-shallow', 'extend');
 
 module.exports = function markdown(str, opts) {
   if (typeof str === 'object') {
@@ -17,14 +18,14 @@ module.exports = function markdown(str, opts) {
     str = null;
   }
 
-  opts = extend({}, opts);
-  extend(opts, opts.hash);
+  opts = lazy.extend({}, opts);
+  lazy.extend(opts, opts.hash);
 
   if (this && this.app && this.options) {
-    extend(opts, this.options.remarkable);
+    lazy.extend(opts, this.options.remarkable);
   }
 
-  var md = new Remarkable(extend({
+  var md = new lazy.Remarkable(lazy.extend({
     breaks: false,
     html: true,
     langPrefix: 'lang-',
@@ -34,12 +35,12 @@ module.exports = function markdown(str, opts) {
     highlight: function highlight(code, lang) {
       try {
         try {
-          return hljs.highlight(lang, code).value;
+          return lazy.hljs.highlight(lang, code).value;
         } catch (err) {
           if (!/Unknown language/i.test(err.message)) {
             throw err;
           }
-          return hljs.highlightAuto(code).value;
+          return lazy.hljs.highlightAuto(code).value;
         }
       } catch (err) {
         return code;

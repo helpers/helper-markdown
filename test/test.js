@@ -7,6 +7,7 @@
 
 'use strict';
 
+/* deps: mocha */
 var should = require('should');
 var handlebars = require('handlebars');
 var _ = require('lodash');
@@ -72,25 +73,25 @@ describe('sync', function () {
   describe('lodash:', function () {
     it('should work as a lodash mixin:', function () {
       _.mixin({markdown: markdown});
-      _.template('<%= _.markdown("# heading") %>', {}).should.equal('<h1>heading</h1>\n');
+      _.template('<%= _.markdown("# heading") %>')({}).should.equal('<h1>heading</h1>\n');
     });
 
     it('should pass options to remarkable:', function () {
       _.mixin({markdown: markdown});
-      var a = _.template('<%= _.markdown("foo\\n```js\\nvar foo = {};\\n```\\nbar") %>', {});
+      var a = _.template('<%= _.markdown("foo\\n```js\\nvar foo = {};\\n```\\nbar") %>')({});
       a.should.equal('<p>foo</p>\n<pre><code class="lang-js"><span class="hljs-keyword">var</span> foo = {};\n</code></pre>\n<p>bar</p>\n');
 
-      var b = _.template('<%= _.markdown("foo\\n```js\\nvar foo = {};\\n```\\nbar", {langPrefix: \'language-\'}) %>', {});
+      var b = _.template('<%= _.markdown("foo\\n```js\\nvar foo = {};\\n```\\nbar", {langPrefix: \'language-\'}) %>')({});
       b.should.equal('<p>foo</p>\n<pre><code class="language-js"><span class="hljs-keyword">var</span> foo = {};\n</code></pre>\n<p>bar</p>\n');
     });
 
-    it('should work when passed to lodash on the context:', function () {
-      _.template('<%= markdown("# heading") %>', {markdown: markdown}).should.equal('<h1>heading</h1>\n');
+    it('should work when passed to lodash as a string:', function () {
+      _.template('<%= markdown("# heading") %>')({markdown: markdown}).should.equal('<h1>heading</h1>\n');
     });
 
     it('should work as a lodash import:', function () {
       var settings = {imports: {markdown: markdown}};
-      _.template('<%= markdown("# heading") %>', {}, settings).should.equal('<h1>heading</h1>\n');
+      _.template('<%= markdown("# heading") %>', settings)({}).should.equal('<h1>heading</h1>\n');
     });
   });
 });

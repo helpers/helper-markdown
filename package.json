@@ -1,36 +1,36 @@
 {
   "name": "helper-markdown",
   "description": "Markdown template helper. Uses remarkable to render markdown in templates. Should work with Handlebars, Lo-Dash or any template engine that supports helper functions.",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "homepage": "https://github.com/helpers/helper-markdown",
-  "author": {
-    "name": "Jon Schlinkert",
-    "url": "https://github.com/jonschlinkert"
-  },
+  "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "repository": "helpers/helper-markdown",
   "bugs": {
     "url": "https://github.com/helpers/helper-markdown/issues"
   },
   "license": "MIT",
-  "files": ["index.js"],
+  "files": [
+    "index.js"
+  ],
   "main": "index.js",
   "engines": {
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "mocha -R spec"
+    "test": "mocha"
   },
   "dependencies": {
-    "extend-shallow": "^2.0.1",
-    "highlight.js": "^8.7.0",
-    "lazy-cache": "^0.2.3",
+    "isobject": "^2.0.0",
+    "mixin-deep": "^1.1.3",
     "remarkable": "^1.6.0"
   },
   "devDependencies": {
-    "handlebars": "^3.0.3",
+    "gulp-format-md": "^0.1.5",
+    "handlebars": "^4.0.5",
+    "highlight.js": "^9.1.0",
     "lodash": "^3.10.1",
-    "mocha": "^2.2.5",
-    "should": "^7.0.4"
+    "mocha": "*",
+    "should": "*"
   },
   "keywords": [
     "block",
@@ -45,5 +45,29 @@
     "md",
     "remarkable",
     "template"
-  ]
+  ],
+  "verb": {
+    "related": {
+      "list": [
+        "assemble",
+        "handlebars",
+        "lodash",
+        "template",
+        "underscore",
+        "verb"
+      ]
+    },
+    "reflinks": [
+      "assemble",
+      "handlebars",
+      "lodash",
+      "templates",
+      "underscore",
+      "verb"
+    ],
+    "plugins": [
+      "gulp-format-md"
+    ],
+    "layout": "default"
+  }
 }

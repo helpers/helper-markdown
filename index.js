@@ -7,47 +7,43 @@
 
 'use strict';
 
-var lazy = require('lazy-cache')(require);
-lazy('highlight.js', 'hljs');
-lazy('remarkable', 'Remarkable');
-lazy('extend-shallow', 'extend');
+var isObject = require('isobject');
+var Remarkable = require('remarkable');
+var merge = require('mixin-deep');
 
-module.exports = function markdown(str, opts) {
-  if (typeof str === 'object') {
-    opts = str;
-    str = null;
+module.exports = function markdown(config) {
+  if (typeof config === 'string') {
+    return helper.apply(this, arguments);
   }
 
-  opts = lazy.extend({}, opts);
-  lazy.extend(opts, opts.hash);
+  config = config || {};
 
-  if (this && this.app && this.options) {
-    lazy.extend(opts, this.options.remarkable);
+  if (config.fn || config.hash) {
+    return helper.apply(this, arguments);
   }
 
-  var md = new lazy.Remarkable(lazy.extend({
-    breaks: false,
-    html: true,
-    langPrefix: 'lang-',
-    linkify: true,
-    typographer: false,
-    xhtmlOut: false,
-    highlight: function highlight(code, lang) {
-      try {
-        try {
-          return lazy.hljs.highlight(lang, code).value;
-        } catch (err) {
-          if (!/Unknown language/i.test(err.message)) {
-            throw err;
-          }
-          return lazy.hljs.highlightAuto(code).value;
-        }
-      } catch (err) {
-        return code;
-      }
+  function helper(context, options) {
+    if (typeof context === 'string') {
+      var opts = merge({}, config, options);
+      var md = new Remarkable(opts);
+      return md.render(context);
     }
-  }, opts));
 
-  str = str || opts.fn(this);
-  return md.render(str);
+    if (isObject(context) && typeof context.fn === 'function') {
+      options = context;
+      context = {};
+    }
+
+    options = merge({ html: true, breaks: true }, config, options);
+    options = merge({}, options, options.markdown, options.hash);
+    if (options.hasOwnProperty('lang')) {
+      options.langPrefix = options.lang;
+    }
+
+    var md = new Remarkable(options);
+    var ctx = merge({}, options, this.context, context);
+    return md.render(options.fn(ctx));
+  }
+
+  return helper;
 };

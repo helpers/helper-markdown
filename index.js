@@ -17,8 +17,7 @@ module.exports = function markdown(config) {
   }
 
   config = config || {};
-
-  if (config.fn || config.hash) {
+  if (config.fn || config.hash || arguments.length > 1) {
     return helper.apply(this, arguments);
   }
 

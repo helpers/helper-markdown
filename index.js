@@ -40,7 +40,7 @@ module.exports = function markdown(config) {
     }
 
     var md = new Remarkable(options);
-    var ctx = merge({}, options, this.context, context);
+    var ctx = merge({}, options, this, context);
     return md.render(options.fn(ctx));
   }
 

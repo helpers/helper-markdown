@@ -52,6 +52,14 @@
     "template"
   ],
   "verb": {
+    "toc": true,
+    "layout": "default",
+    "tasks": [
+      "readme"
+    ],
+    "plugins": [
+      "gulp-format-md"
+    ],
     "related": {
       "list": [
         "assemble",
@@ -68,11 +76,13 @@
       "lodash",
       "templates",
       "underscore",
-      "verb"
+      "verb",
+      "generate",
+      "generate-helper",
+      "helpers"
     ],
-    "plugins": [
-      "gulp-format-md"
-    ],
-    "layout": "default"
+    "lint": {
+      "reflinks": true
+    }
   }
 }

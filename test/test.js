@@ -50,7 +50,7 @@ describe('sync', function() {
   describe('handlebars:', function() {
     it('should work as a handlebars helper:', function() {
       handlebars.registerHelper('markdown', markdown({highlight: highlight}));
-      handlebars.compile('{{#markdown}}# heading{{/markdown}}')().should.equal('<h1>heading</h1>\n');
+      handlebars.compile('{{#markdown}}# {{title}}{{/markdown}}')({title: 'heading'}).should.equal('<h1>heading</h1>\n');
     });
 
     it('should pass hash options to remarkable:', function() {
@@ -81,7 +81,7 @@ describe('sync', function() {
   describe('lodash:', function() {
     it('should work as a lodash mixin:', function() {
       _.mixin({markdown: markdown});
-      _.template('<%= _.markdown("# heading") %>')({}).should.equal('<h1>heading</h1>\n');
+      _.template('<%= _.markdown("# " + title) %>')({title: 'heading'}).should.equal('<h1>heading</h1>\n');
     });
 
     it('should pass options to remarkable:', function() {

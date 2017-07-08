@@ -2,104 +2,88 @@
 
 require('mocha');
 var _ = require('lodash');
-var should = require('should');
+var assert = require('assert');
 var handlebars = require('handlebars');
-var hljs = require('highlight.js');
 var markdown = require('..');
 
-function highlight(code, lang) {
-  try {
-    try {
-      return hljs.highlight(lang, code).value;
-    } catch (err) {
-      if (!/Unknown language/i.test(err.message)) {
-        throw err;
-      }
-      return hljs.highlightAuto(code).value;
-    }
-  } catch (err) {
-    return code;
-  }
-}
-
-describe('sync', function() {
-  describe('markdown helper', function() {
+describe('helper-markdown', function() {
+  describe('main export', function() {
     it('should render markdown:', function() {
-      markdown('# heading').should.equal('<h1>heading</h1>\n');
+      assert.equal(markdown('# heading'), '<h1>heading</h1>\n');
     });
 
     it('should highlight code blocks', function() {
-      var html = markdown('```js\nvar foo = "bar";\n```\n', {highlight: highlight});
-      html.should.equal('<pre><code class="language-js"><span class="hljs-keyword">var</span> foo = <span class="hljs-string">"bar"</span>;\n</code></pre>\n');
+      var html = markdown('```js\nvar foo = "bar";\n```\n', {});
+      assert.equal(html, '<pre><code class="language-js"><span class="hljs-keyword">var</span> foo = <span class="hljs-string">"bar"</span>;\n</code></pre>\n');
     });
 
     it('should pass options to remarkable', function() {
-      var a = markdown('abc https://github.com/jonschlinkert/remarkable xyz', {highlight: highlight, linkify: true});
-      a.should.equal('<p>abc <a href="https://github.com/jonschlinkert/remarkable">https://github.com/jonschlinkert/remarkable</a> xyz</p>\n');
+      var a = markdown('abc https://github.com/jonschlinkert/remarkable xyz', {linkify: true});
+      assert.equal(a, '<p>abc <a href="https://github.com/jonschlinkert/remarkable">https://github.com/jonschlinkert/remarkable</a> xyz</p>\n');
 
-      var b = markdown('abc https://github.com/jonschlinkert/remarkable xyz', {highlight: highlight, linkify: false});
-      b.should.equal('<p>abc https://github.com/jonschlinkert/remarkable xyz</p>\n');
+      var b = markdown('abc https://github.com/jonschlinkert/remarkable xyz', {linkify: false});
+      assert.equal(b, '<p>abc https://github.com/jonschlinkert/remarkable xyz</p>\n');
     });
 
     it('should pass options to highlight.js:', function() {
-      var html = markdown('```js\nvar foo = "bar";\n```\n', {highlight: highlight, langPrefix: 'language-'});
-      html.should.equal('<pre><code class="language-js"><span class="hljs-keyword">var</span> foo = <span class="hljs-string">"bar"</span>;\n</code></pre>\n');
+      var html = markdown('```js\nvar foo = "bar";\n```\n', {langPrefix: 'language-'});
+      assert.equal(html, '<pre><code class="language-js"><span class="hljs-keyword">var</span> foo = <span class="hljs-string">"bar"</span>;\n</code></pre>\n');
     });
   });
 
   describe('handlebars:', function() {
     it('should work as a handlebars helper:', function() {
-      handlebars.registerHelper('markdown', markdown({highlight: highlight}));
-      handlebars.compile('{{#markdown}}# {{title}}{{/markdown}}')({title: 'heading'}).should.equal('<h1>heading</h1>\n');
+      handlebars.registerHelper('markdown', markdown({}));
+      assert.equal(handlebars.compile('{{#markdown}}# heading{{/markdown}}')(), '<h1>heading</h1>\n');
     });
 
     it('should pass hash options to remarkable:', function() {
-      handlebars.registerHelper('markdown', markdown({highlight: highlight}));
+      handlebars.registerHelper('markdown', markdown({}));
 
       // `linkify: true`
       var a = handlebars.compile('{{#markdown linkify=true}}abc https://github.com/jonschlinkert/remarkable xyz{{/markdown}}')();
-      a.should.equal('<p>abc <a href="https://github.com/jonschlinkert/remarkable">https://github.com/jonschlinkert/remarkable</a> xyz</p>\n');
+      assert.equal(a, '<p>abc <a href="https://github.com/jonschlinkert/remarkable">https://github.com/jonschlinkert/remarkable</a> xyz</p>\n');
 
       // `linkify: false`
       var b = handlebars.compile('{{#markdown linkify=false}}abc https://github.com/jonschlinkert/remarkable xyz{{/markdown}}')();
-      b.should.equal('<p>abc https://github.com/jonschlinkert/remarkable xyz</p>\n');
+      assert.equal(b, '<p>abc https://github.com/jonschlinkert/remarkable xyz</p>\n');
     });
 
     it('should pass hash options to highlight.js:', function() {
-      handlebars.registerHelper('markdown', markdown({highlight: highlight}));
+      handlebars.registerHelper('markdown', markdown({}));
 
       // `langPrefix = language-`
       var a = handlebars.compile('{{#markdown}}```js\nvar foo = "bar";\n```\n{{/markdown}}')();
-      a.should.equal('<pre><code class="language-js"><span class="hljs-keyword">var</span> foo = <span class="hljs-string">"bar"</span>;\n</code></pre>\n');
+      assert.equal(a, '<pre><code class="language-js"><span class="hljs-keyword">var</span> foo = <span class="hljs-string">"bar"</span>;\n</code></pre>\n');
 
       // `langPrefix = language-`
       var b = handlebars.compile('{{#markdown langPrefix="language-"}}```js\nvar foo = "bar";\n```\n{{/markdown}}')();
-      b.should.equal('<pre><code class="language-js"><span class="hljs-keyword">var</span> foo = <span class="hljs-string">"bar"</span>;\n</code></pre>\n');
+      assert.equal(b, '<pre><code class="language-js"><span class="hljs-keyword">var</span> foo = <span class="hljs-string">"bar"</span>;\n</code></pre>\n');
     });
   });
 
   describe('lodash:', function() {
     it('should work as a lodash mixin:', function() {
       _.mixin({markdown: markdown});
-      _.template('<%= _.markdown("# " + title) %>')({title: 'heading'}).should.equal('<h1>heading</h1>\n');
+      assert.equal(_.template('<%= _.markdown("# heading") %>')({}), '<h1>heading</h1>\n');
     });
 
     it('should pass options to remarkable:', function() {
-      _.mixin({markdown: markdown({highlight: highlight})});
+      _.mixin({markdown: markdown({})});
       var a = _.template('<%= _.markdown("foo\\n```js\\nvar foo = {};\\n```\\nbar") %>')({});
-      a.should.equal('<p>foo</p>\n<pre><code class="language-js"><span class="hljs-keyword">var</span> foo = {};\n</code></pre>\n<p>bar</p>\n');
+      assert.equal(a, '<p>foo</p>\n<pre><code class="language-js"><span class="hljs-keyword">var</span> foo = {};\n</code></pre>\n<p>bar</p>\n');
 
       var b = _.template('<%= _.markdown("foo\\n```js\\nvar foo = {};\\n```\\nbar", {langPrefix: \'language-\'}) %>')({});
-      b.should.equal('<p>foo</p>\n<pre><code class="language-js"><span class="hljs-keyword">var</span> foo = {};\n</code></pre>\n<p>bar</p>\n');
+      assert.equal(b, '<p>foo</p>\n<pre><code class="language-js"><span class="hljs-keyword">var</span> foo = {};\n</code></pre>\n<p>bar</p>\n');
     });
 
     it('should work when passed to lodash as a string:', function() {
-      _.template('<%= markdown("# heading") %>')({markdown: markdown}).should.equal('<h1>heading</h1>\n');
+      assert.equal(_.template('<%= markdown("# heading") %>')({markdown: markdown}), '<h1>heading</h1>\n');
     });
 
     it('should work as a lodash import:', function() {
       var settings = {imports: {markdown: markdown}};
-      _.template('<%= markdown("# heading") %>', settings)({}).should.equal('<h1>heading</h1>\n');
+      assert.equal(_.template('<%= markdown("# heading") %>', settings)({}), '<h1>heading</h1>\n');
     });
   });
 });

@@ -25,20 +25,19 @@
     "test": "mocha"
   },
   "dependencies": {
-    "isobject": "^2.0.0",
-    "mixin-deep": "^1.1.3",
-    "remarkable": "^1.6.0"
+    "handlebars-utils": "^1.0.2",
+    "highlight.js": "^9.12.0",
+    "remarkable": "^1.7.1"
   },
   "devDependencies": {
-    "gulp-format-md": "^0.1.5",
-    "handlebars": "^4.0.5",
-    "highlight.js": "^9.1.0",
-    "lodash": "^3.10.1",
-    "mocha": "*",
-    "should": "*"
+    "gulp-format-md": "^1.0.0",
+    "handlebars": "^4.0.10",
+    "lodash": "^4.17.4",
+    "mocha": "^3.4.2"
   },
   "keywords": [
     "block",
+    "compile",
     "engine",
     "expression",
     "function",
@@ -49,7 +48,9 @@
     "markdown",
     "md",
     "remarkable",
-    "template"
+    "render",
+    "template",
+    "templates"
   ],
   "verb": {
     "toc": true,
@@ -73,13 +74,9 @@
     "reflinks": [
       "assemble",
       "handlebars",
-      "lodash",
       "templates",
       "underscore",
-      "verb",
-      "generate",
-      "generate-helper",
-      "helpers"
+      "verb"
     ],
     "lint": {
       "reflinks": true

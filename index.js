@@ -2,7 +2,8 @@
 
 var hljs = require('highlight.js');
 var utils = require('handlebars-utils');
-var Remarkable = require('remarkable');
+var { Remarkable } = require('remarkable');
+var linkify = require('remarkable/linkify').linkify;
 var defaults = { html: true, breaks: true, highlight: highlight };
 
 module.exports = function(config) {
@@ -30,7 +31,16 @@ module.exports = function(config) {
       opts.langPrefix = opts.lang;
     }
 
-    var md = new Remarkable(opts);
+    var md;
+
+    if (opts.hasOwnProperty('linkify')) {
+      var useLinkify = opts.linkify ? opts.linkify : false;
+      delete opts.linkify;
+      md = (useLinkify) ? new Remarkable(opts).use(linkify) : new Remarkable(opts);
+    } else {
+      md = new Remarkable(opts);
+    }
+
     var val = utils.value(str, ctx, options);
     return md.render(val);
   }

@@ -2,7 +2,7 @@
 
 var hljs = require('highlight.js');
 var utils = require('handlebars-utils');
-var { Remarkable } = require('remarkable');
+var Remarkable = require('remarkable').Remarkable;
 var linkify = require('remarkable/linkify').linkify;
 var defaults = { html: true, breaks: true, highlight: highlight };
 

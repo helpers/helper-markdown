@@ -26,7 +26,7 @@ $ npm install --save helper-markdown
 ## API
 
 ```js
-var markdown = require('helper');
+var markdown = require('helper-markdown');
 ```
 
 Returns a function that returns the helper, allowing an options object to be passed:

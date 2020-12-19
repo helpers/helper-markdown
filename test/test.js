@@ -14,7 +14,7 @@ describe('helper-markdown', function() {
 
     it('should highlight code blocks', function() {
       var html = markdown('```js\nvar foo = "bar";\n```\n', {});
-      assert.equal(html, '<pre><code class="language-js"><span class="hljs-keyword">var</span> foo = <span class="hljs-string">"bar"</span>;\n</code></pre>\n');
+      assert.equal(html, '<pre><code class="language-js"><span class="hljs-keyword">var</span> foo = <span class="hljs-string">&quot;bar&quot;</span>;\n</code></pre>\n');
     });
 
     it('should pass options to remarkable', function() {
@@ -27,7 +27,7 @@ describe('helper-markdown', function() {
 
     it('should pass options to highlight.js:', function() {
       var html = markdown('```js\nvar foo = "bar";\n```\n', {langPrefix: 'language-'});
-      assert.equal(html, '<pre><code class="language-js"><span class="hljs-keyword">var</span> foo = <span class="hljs-string">"bar"</span>;\n</code></pre>\n');
+      assert.equal(html, '<pre><code class="language-js"><span class="hljs-keyword">var</span> foo = <span class="hljs-string">&quot;bar&quot;</span>;\n</code></pre>\n');
     });
   });
 
@@ -54,11 +54,11 @@ describe('helper-markdown', function() {
 
       // `langPrefix = language-`
       var a = handlebars.compile('{{#markdown}}```js\nvar foo = "bar";\n```\n{{/markdown}}')();
-      assert.equal(a, '<pre><code class="language-js"><span class="hljs-keyword">var</span> foo = <span class="hljs-string">"bar"</span>;\n</code></pre>\n');
+      assert.equal(a, '<pre><code class="language-js"><span class="hljs-keyword">var</span> foo = <span class="hljs-string">&quot;bar&quot;</span>;\n</code></pre>\n');
 
       // `langPrefix = language-`
       var b = handlebars.compile('{{#markdown langPrefix="language-"}}```js\nvar foo = "bar";\n```\n{{/markdown}}')();
-      assert.equal(b, '<pre><code class="language-js"><span class="hljs-keyword">var</span> foo = <span class="hljs-string">"bar"</span>;\n</code></pre>\n');
+      assert.equal(b, '<pre><code class="language-js"><span class="hljs-keyword">var</span> foo = <span class="hljs-string">&quot;bar&quot;</span>;\n</code></pre>\n');
     });
   });
 

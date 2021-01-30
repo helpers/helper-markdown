@@ -1,9 +1,9 @@
 'use strict';
 
-var hljs = require('highlight.js');
-var utils = require('handlebars-utils');
-var Remarkable = require('remarkable');
-var defaults = { html: true, breaks: true, highlight: highlight };
+const hljs = require('highlight.js');
+const utils = require('handlebars-utils');
+const Remarkable = require('remarkable');
+const defaults = { html: true, breaks: true, highlight: highlight };
 
 module.exports = function(config) {
   if (typeof config === 'string' || utils.isOptions(config)) {
@@ -22,16 +22,16 @@ module.exports = function(config) {
       locals = {};
     }
 
-    var ctx = utils.context(this, locals, options);
-    var opts = utils.options(this, locals, options);
+    const ctx = utils.context(this, locals, options);
+    let opts = utils.options(this, locals, options);
     opts = Object.assign({}, defaults, config, opts);
 
     if (opts.hasOwnProperty('lang')) {
       opts.langPrefix = opts.lang;
     }
 
-    var md = new Remarkable(opts);
-    var val = utils.value(str, ctx, options);
+    const md = new Remarkable(opts);
+    const val = utils.value(str, ctx, options);
     return md.render(val);
   }
   return markdown;

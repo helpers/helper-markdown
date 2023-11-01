@@ -2,7 +2,9 @@
 
 var hljs = require('highlight.js');
 var utils = require('handlebars-utils');
-var Remarkable = require('remarkable');
+const { Remarkable } = require('remarkable');
+const { linkify } = require('remarkable/linkify');
+
 var defaults = { html: true, breaks: true, highlight: highlight };
 
 module.exports = function(config) {
@@ -30,7 +32,14 @@ module.exports = function(config) {
       opts.langPrefix = opts.lang;
     }
 
-    var md = new Remarkable(opts);
+    const useLinkify = opts.linkify;
+    delete opts.linkify;
+
+    let md = new Remarkable(opts);
+    if (useLinkify) {
+      md.use(linkify);
+    }
+
     var val = utils.value(str, ctx, options);
     return md.render(val);
   }

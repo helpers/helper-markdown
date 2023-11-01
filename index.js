@@ -2,18 +2,18 @@
 
 var hljs = require('highlight.js');
 var utils = require('handlebars-utils');
-const { Remarkable } = require("remarkable");
-const { linkify } = require("remarkable/linkify");
+const { Remarkable } = require('remarkable');
+const { linkify } = require('remarkable/linkify');
 
 var defaults = { html: true, breaks: true, highlight: highlight };
 
-module.exports = function (config) {
-  if (typeof config === "string" || utils.isOptions(config)) {
+module.exports = function(config) {
+  if (typeof config === 'string' || utils.isOptions(config)) {
     return markdown.apply(defaults, arguments);
   }
 
   function markdown(str, locals, options) {
-    if (typeof str !== "string") {
+    if (typeof str !== 'string') {
       options = locals;
       locals = str;
       str = true;
@@ -28,7 +28,7 @@ module.exports = function (config) {
     var opts = utils.options(this, locals, options);
     opts = Object.assign({}, defaults, config, opts);
 
-    if (opts.hasOwnProperty("lang")) {
+    if (opts.hasOwnProperty('lang')) {
       opts.langPrefix = opts.lang;
     }
 
